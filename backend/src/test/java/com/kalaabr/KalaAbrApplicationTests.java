@@ -1,4 +1,4 @@
-package com.KalaAbr.KalaAbr;
+package com.kalaabr;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
