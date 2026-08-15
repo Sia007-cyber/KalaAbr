@@ -1,0 +1,37 @@
+.cash-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+@media (max-width: 700px) {
+  .cash-overview { grid-template-columns: 1fr; }
+}
+.cash-total {
+  padding: var(--space-5);
+}
+.cash-total-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+.cash-total-value {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+}
+.cash-commit {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: center;
+}
+.panel-subhead {
+  padding: var(--space-3) var(--space-4) var(--space-1);
+}
+.panel-subhead h2 {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+}

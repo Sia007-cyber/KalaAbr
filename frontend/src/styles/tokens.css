@@ -1,0 +1,231 @@
+/* =============================================================
+   KalaAbr — Design tokens (light theme)
+   -------------------------------------------------------------
+   The single source of truth for colors, typography, spacing,
+   radius, elevation, and motion.
+
+   Architecture: semantic tokens are grouped on :root. A future
+   dark theme adds a `[data-theme="dark"]` block that overrides
+   the SAME semantic token names — components never consume
+   raw palette values, so dark mode lands without rework.
+
+   Do NOT use letter-spacing (tracking) on Persian text — it
+   breaks connected script. Tracking is only allowed on Latin
+   labels/numbers if at all.
+   ============================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* ---------- Neutral palette (warm gray) ---------- */
+  --neutral-0: #ffffff;
+  --neutral-50: #fafaf9;
+  --neutral-100: #f5f5f4;
+  --neutral-200: #e7e5e4;
+  --neutral-300: #d6d3d1;
+  --neutral-400: #a8a29e;
+  --neutral-500: #78716c;
+  --neutral-600: #57534e;
+  --neutral-700: #44403c;
+  --neutral-800: #292524;
+  --neutral-900: #1c1917;
+  --neutral-950: #0c0a09;
+
+  /* ---------- Functional palette ---------- */
+  /* Each = tint + strong fg, used as (bg, fg) pairs or bare fg */
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+  --primary-200: #c7d2fe;
+  --primary-600: #4338ca;   /* primary action */
+  --primary-700: #3730a3;
+  --primary-800: #312e81;
+
+  --success-50: #ecfdf5;
+  --success-100: #d1fae5;
+  --success-600: #059669;
+  --success-700: #047857;
+
+  --warning-50: #fffbeb;
+  --warning-100: #fef3c7;
+  --warning-200: #fde68a;
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+
+  --danger-50: #fef2f2;
+  --danger-100: #fee2e2;
+  --danger-600: #dc2626;
+  --danger-700: #b91c1c;
+
+  --info-50: #f0f9ff;
+  --info-100: #e0f2fe;
+  --info-600: #0284c7;
+  --info-700: #0369a1;
+
+  /* Direction (permit type) */
+  --in-50: #f0fdfa;
+  --in-100: #ccfbf1;
+  --in-600: #0d9488;
+  --in-700: #0f766e;
+
+  --out-50: #f5f3ff;
+  --out-100: #ede9fe;
+  --out-600: #7c3aed;
+  --out-700: #6d28d9;
+
+  /* ---------- Semantic tokens ---------- */
+  --bg: var(--neutral-50);
+  --surface: var(--neutral-0);
+  --surface-raised: var(--neutral-100);
+  --surface-sunken: var(--neutral-100);
+  --border: var(--neutral-200);
+  --border-strong: var(--neutral-300);
+  --hairline: var(--neutral-200);
+
+  --text: var(--neutral-900);
+  --text-muted: var(--neutral-600);
+  --text-faint: var(--neutral-400);
+  --text-inverse: var(--neutral-50);
+
+  --focus-ring: var(--primary-600);
+
+  /* ---------- Status & direction semantic maps ---------- */
+  --status-issued-bg: var(--warning-100);
+  --status-issued-fg: var(--warning-700);
+  --status-issued-dot: var(--warning-600);
+
+  --status-confirmed-bg: var(--success-100);
+  --status-confirmed-fg: var(--success-700);
+  --status-confirmed-dot: var(--success-600);
+
+  --status-cancelled-bg: var(--neutral-100);
+  --status-cancelled-fg: var(--neutral-500);
+  --status-cancelled-dot: var(--neutral-400);
+
+  --dir-in-bg: var(--in-100);
+  --dir-in-fg: var(--in-700);
+  --dir-out-bg: var(--out-100);
+  --dir-out-fg: var(--out-700);
+
+  --alert-low-bg: var(--warning-100);
+  --alert-low-fg: var(--warning-700);
+  --alert-out-bg: var(--danger-100);
+  --alert-out-fg: var(--danger-700);
+  --alert-ok-fg: var(--neutral-500);
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Vazirmatn Variable', 'Vazirmatn', system-ui,
+    -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas,
+    monospace;
+
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-base: 0.875rem; /* 14px */
+  --text-md: 1rem;      /* 16px */
+  --text-lg: 1.25rem;   /* 20px */
+  --text-xl: 1.5rem;    /* 24px */
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  --leading-loose: 1.7;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-1: 0.25rem;  /* 4px  */
+  --space-2: 0.5rem;   /* 8px  */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+
+  /* ---------- Sizing ---------- */
+  --sidebar-w: 15.5rem;     /* 248px expanded */
+  --sidebar-w-collapsed: 4rem; /* 64px */
+  --control-h: 2.25rem;     /* 36px default */
+  --control-h-sm: 2rem;     /* 32px compact */
+  --control-h-lg: 2.75rem;  /* 44px touch */
+  --table-row-h: 2.5rem;    /* 40px */
+  --table-row-h-sm: 2rem;   /* 32px compact */
+  --page-max-w: 90rem;      /* 1440px */
+
+  /* ---------- Radius ---------- */
+  --radius-xs: 0.25rem;  /* 4px */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem;   /* 8px  — fields, buttons */
+  --radius-lg: 0.625rem; /* 10px — cards, panels */
+  --radius-full: 9999px; /* chips, pills */
+
+  /* ---------- Elevation ---------- */
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.06),
+    0 1px 3px rgba(28, 25, 23, 0.04);
+  --shadow-md: 0 2px 6px rgba(28, 25, 23, 0.08),
+    0 4px 12px rgba(28, 25, 23, 0.05);
+  --shadow-lg: 0 8px 24px rgba(28, 25, 23, 0.12),
+    0 4px 8px rgba(28, 25, 23, 0.06);
+  --shadow-drawer: -8px 0 24px rgba(28, 25, 23, 0.1);
+
+  /* ---------- Focus ring ---------- */
+  --focus-ring-w: 2px;
+  --focus-ring-offset: 2px;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 260ms;
+  --dur-enter: 280ms;
+  --dur-exit: 180ms;
+  --spring-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* ---------- Layout ---------- */
+  --header-h: 3.5rem;   /* 56px */
+  --content-gutter: 1.5rem; /* 24px */
+  --content-gutter-sm: 1rem; /* 16px mobile */
+
+  /* ---------- Misc ---------- */
+  --z-nav: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-palette: 70;
+  --z-toast: 80;
+
+  --density-row: var(--table-row-h);
+}
+
+/* ---------- Accessibility: reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-enter: 0ms;
+    --dur-exit: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- High contrast: defined borders ---------- */
+@media (prefers-contrast: more) {
+  :root {
+    --border: var(--neutral-400);
+    --border-strong: var(--neutral-600);
+  }
+}

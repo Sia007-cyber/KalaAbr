@@ -1,0 +1,197 @@
+/* =============================================================
+   Item detail — identity strip, live stock, ledger + capacity,
+   permit history.
+   ============================================================= */
+
+/* ---------- Identity strip ---------- */
+.itd-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.itd-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.itd-meta-label {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+.itd-meta-value {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text);
+}
+.itd-link {
+  color: var(--primary-700);
+}
+.itd-link:hover {
+  color: var(--primary-800);
+}
+
+/* ---------- Live stock cells ---------- */
+.itd-stock {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+@media (max-width: 1100px) {
+  .itd-stock { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .itd-stock { grid-template-columns: 1fr; }
+}
+
+.itd-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.itd-cell-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+}
+.itd-cell-value {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+  line-height: var(--leading-tight);
+}
+.itd-cell-hint {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+.itd-cell.is-incoming .itd-cell-value { color: var(--in-700); }
+.itd-cell.is-reserved .itd-cell-value { color: var(--out-700); }
+.itd-cell.is-available .itd-cell-value { color: var(--success-700); }
+.itd-cell.is-low {
+  border-color: var(--warning-600);
+  border-inline-start-width: 3px;
+}
+
+/* ---------- Ledger / capacity panels ---------- */
+.itd-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.itd-led-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.itd-led-row strong {
+  color: var(--text);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.itd-led-row.is-pos strong { color: var(--success-700); }
+.itd-led-row.is-neg strong { color: var(--danger-600); }
+.itd-led-row.is-accent strong { color: var(--text); font-weight: var(--weight-bold); }
+
+.itd-cap-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-1);
+}
+.itd-cap-name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+.itd-cap-num {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.itd-cap-bar {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.itd-cap-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--primary-600);
+  transition: width var(--dur-slow) var(--ease-out);
+}
+.itd-cap-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.itd-cap-lines li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.itd-cap-lines .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+}
+.itd-cap-lines .dot.is-pos { background: var(--success-600); }
+.itd-cap-lines .dot.is-warn { background: var(--warning-600); }
+
+/* ---------- Permit history ---------- */
+.itd-activity {
+  padding: var(--space-4);
+  overflow: hidden;
+}
+.itd-table {
+  margin-top: var(--space-2);
+}
+.itd-table .t-num { font-variant-numeric: tabular-nums; }
+.itd-id {
+  font-variant-numeric: tabular-nums;
+}
+.itd-qty-in {
+  color: var(--in-700);
+  font-weight: var(--weight-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.itd-qty-out {
+  color: var(--out-700);
+  font-weight: var(--weight-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.itd-qty-muted {
+  color: var(--text-faint);
+}
+.itd-date {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+/* ---------- Footnote + not-found ---------- */
+.itd-footnote {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  margin-top: var(--space-3);
+}
+.itd-missing {
+  max-width: 30rem;
+  margin: var(--space-12) auto 0;
+}
+.itd-missing .btn { align-self: center; }
