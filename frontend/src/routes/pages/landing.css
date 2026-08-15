@@ -13,14 +13,27 @@
 }
 
 /* ---------------- Top bar ---------------- */
+/* Persistent header spanning the full viewport width, visually distinct
+   from the page base: a solid warm-gray bar (--header-bg, darker than
+   the --bg body and every raised surface, lighter than dark text) that
+   carries the brand + ورود / ثبتنام. The inner row is locked to the
+   content gutter width so it aligns with the hero below. */
 .landing-topbar {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-strong);
+}
+.landing-topbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4) var(--content-gutter);
+  gap: var(--space-4);
   max-width: 1120px;
   width: 100%;
   margin-inline: auto;
+  padding: var(--space-4) var(--content-gutter);
 }
 .landing-brand {
   display: inline-flex;
@@ -56,11 +69,18 @@
 /* ---------------- Hero ---------------- */
 .landing-hero {
   position: relative;
+  width: 100%;
+  text-align: center;
+}
+/* Centered text column; hero itself is full-width so the decorative
+   crate layer behind it can scatter across the whole side gutters. */
+.landing-hero-inner {
+  position: relative;
+  z-index: 1;
   max-width: 1120px;
   width: 100%;
   margin-inline: auto;
   padding: clamp(3rem, 8vw, 6rem) var(--content-gutter) clamp(2.5rem, 6vw, 4rem);
-  text-align: center;
 }
 /* Hero content sits above the decorative crate layer */
 .landing-hero > :not(.landing-hero-decor) {
@@ -101,17 +121,19 @@
   flex-wrap: wrap;
   margin-top: var(--space-8);
 }
-.landing-hero-mark {
-  margin: 0 0 var(--space-6);
-}
 
 /* ---------------- Hero decorative crates ----------------
-   One layer pinned behind the hero text; the items are placed in
-   the side gutters (mirrored via :nth-child sides) at varied
-   vertical offsets. Each item starts invisible and fades in with a
-   slight rise, staggered via --decor-delay (200–400ms, ease-out).
-   The global prefers-reduced-motion block below keeps it visible
-   (opacity 1) with the animation off — no hidden content. */
+   One layer pinned across the full hero (from below the header all
+   the way past the CTAs). Items form two dense columns in the side
+   gutters — placed via [data-side] + CSS custom props --decor-top /
+   --decor-size / --decor-rot / --decor-delay — covering the whole
+   vertical run at varied sizes/rotations for a natural warehouse-shelf
+   feel. Kept intentionally muted (moderate opacity + soft shadow) so
+   they read as background and never reduce legibility of the copy.
+   Each item starts invisible and rises in with a slight lift, staggered
+   so the column cascades on load. The global prefers-reduced-motion
+   guard below keeps them visible (opacity 1) with the animation off —
+   no hidden content. */
 .landing-hero-decor {
   position: absolute;
   inset: 0;
@@ -122,54 +144,31 @@
 .landing-decor-item {
   position: absolute;
   display: inline-flex;
-  width: clamp(64px, 5vw, 92px);
-  filter: drop-shadow(0 6px 12px rgba(28, 25, 23, 0.06));
-  opacity: 0;
+  top: var(--decor-top, 20%);
+  width: var(--decor-size, 5vw);
+  opacity: 0.5;
+  filter: drop-shadow(0 8px 14px rgba(28, 25, 23, 0.08));
   animation: box-rise var(--dur-enter) var(--ease-out) both;
   animation-delay: var(--decor-delay, 0ms);
   will-change: opacity, transform;
 }
+/* The two gutter zones — start = inline-start, end = inline-end. Each
+   box is spread HORIZONTALLY across its whole side zone via --decor-x
+   (a percentage offset from the fold edge), so the scatter fills the
+   rectangle corner-to-corner instead of a thin strip. */
+.landing-decor-item[data-side='start'] {
+  inset-inline-start: var(--decor-x, 2.5%);
+}
+.landing-decor-item[data-side='end'] {
+  inset-inline-end: var(--decor-x, 2.5%);
+}
 .landing-decor-item svg {
   width: 100%;
   height: auto;
+  transform: rotate(var(--decor-rot, 0deg));
 }
-/* left gutter (inline-start column) — items 1, 3, 5 */
-.landing-decor-item:nth-child(1) {
-  inset-inline-start: clamp(1rem, 3vw, 2.5rem);
-  top: 16%;
-  width: clamp(64px, 5vw, 92px);
-  transform: rotate(-8deg);
-}
-.landing-decor-item:nth-child(3) {
-  inset-inline-start: clamp(2.5rem, 6vw, 5rem);
-  top: 56%;
-  width: clamp(52px, 3.6vw, 68px);
-  transform: rotate(7deg);
-}
-.landing-decor-item:nth-child(5) {
-  inset-inline-start: clamp(0.5rem, 2vw, 1.75rem);
-  top: 34%;
-  width: clamp(58px, 3.9vw, 76px);
-  transform: rotate(-5deg);
-}
-/* right gutter (inline-end column) — items 2, 4, 6 */
-.landing-decor-item:nth-child(2) {
-  inset-inline-end: clamp(1rem, 3vw, 2.5rem);
-  top: 24%;
-  width: clamp(64px, 5vw, 92px);
-  transform: rotate(8deg);
-}
-.landing-decor-item:nth-child(4) {
-  inset-inline-end: clamp(2.5rem, 6vw, 5rem);
-  top: 60%;
-  width: clamp(52px, 3.6vw, 68px);
-  transform: rotate(-7deg);
-}
-.landing-decor-item:nth-child(6) {
-  inset-inline-end: clamp(0.5rem, 2vw, 1.75rem);
-  top: 12%;
-  width: clamp(60px, 4.2vw, 80px);
-  transform: rotate(-5deg);
+.landing-decor-item:hover {
+  opacity: 0.75;
 }
 
 @keyframes box-rise {
@@ -186,7 +185,7 @@
 @media (prefers-reduced-motion: reduce) {
   .landing-decor-item {
     animation: none;
-    opacity: 1;
+    opacity: 0.5;
   }
 }
 

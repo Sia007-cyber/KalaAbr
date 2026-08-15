@@ -77,6 +77,10 @@
   --surface: var(--neutral-0);
   --surface-raised: var(--neutral-100);
   --surface-sunken: var(--neutral-100);
+  /* Persistent landing header bar — a warm gray distinctly darker than
+     the base --bg but lighter than dark text, so the bar reads as its
+     own surface while wordmark + nav stay legible. */
+  --header-bg: #C8CBD8;
   --border: var(--neutral-200);
   --border-strong: var(--neutral-300);
   --hairline: var(--neutral-200);
