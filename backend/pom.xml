@@ -15,7 +15,7 @@
 	<description>Warehouse Management System - REST API backend</description>
 	<properties>
 		<java.version>26</java.version>
-		<testcontainers.version>1.20.4</testcontainers.version>
+		<testcontainers.version>1.21.4</testcontainers.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -54,11 +54,12 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<!-- مهاجرت اسکیمای دیتابیس -->
+		<!-- مهاجرت اسکیمای دیتابیس — Spring Boot 4 از این استارتر برای راه‌اندازی خودکار Flyway استفاده می‌کند -->
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
+		<!-- پشتیبانی Postgres برای Flyway — لازم است، استارتر به‌تنهایی آن را نمی‌آورد -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
