@@ -17,8 +17,8 @@ import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
 import { PageHeader } from '../../components/layout/AppLayout'
 import { DirectionChip, StatusChip, StockAlertChip } from '../../components/ui/chips'
 import { Button } from '../../components/ui/button'
-import { useItem, useItems, usePermits, useWarehouse } from '../../lib/hooks'
-import { faDateTime, faDigits, faMoneyCompact } from '../../lib/format'
+import { useItem, usePermits, useWarehouse } from '../../lib/hooks'
+import { faDateTime, faDigits } from '../../lib/format'
 import type { Item, Permit } from '../../types/api'
 import './item-detail.css'
 
@@ -54,7 +54,6 @@ function ItemBody({ item }: { item: Item }) {
 
   /* live warehouse for capacity context (exposure isn't in the Item DTO) */
   const wh = useWarehouse(item.warehouseId ?? 0)
-  const items = useItems({ warehouseId: item.warehouseId ?? undefined })
   const permits = usePermits()
 
   const warehouse = wh.data ?? null

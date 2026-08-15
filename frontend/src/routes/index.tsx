@@ -15,7 +15,7 @@ import { ComingSoonPage } from './pages/ComingSoonPage'
 import { PermitNewPage } from './pages/PermitNewPage'
 import { PermitDetailPage } from './pages/PermitDetailPage'
 import { ItemDetailPage } from './pages/ItemDetailPage'
-import { WarehouseDetailPage } from './pages/StubPages'
+import { WarehouseDetailPage } from './pages/WarehouseDetailPage'
 
 export const router = createBrowserRouter([
   {

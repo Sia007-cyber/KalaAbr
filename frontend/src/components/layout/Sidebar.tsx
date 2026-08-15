@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { usePermits, useItems } from '../../lib/hooks'
 import { faDigits } from '../../lib/format'
+import logoUrl from '../../assets/logo-mark.svg'
 
 interface NavItem {
   to: string
@@ -100,17 +101,12 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           type="button"
           className="sidebar-logo"
           onClick={() => nav('/dashboard')}
-          aria-label="کالاآبر — صفحه اصلی"
+          aria-label="کالاابر — صفحه اصلی"
         >
           <span className="sidebar-logo-mark" aria-hidden>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="var(--primary-600)" />
-              <rect x="6" y="8" width="12" height="2" rx="1" fill="#fff" />
-              <rect x="6" y="12.5" width="9" height="2" rx="1" fill="#C7D2FE" />
-              <rect x="6" y="17" width="6.5" height="2" rx="1" fill="#A5B4FC" />
-            </svg>
+            <img src={logoUrl} alt="" width="18" height="18" />
           </span>
-          {!collapsed && <span className="sidebar-logo-text">کالاآبر</span>}
+          {!collapsed && <span className="sidebar-logo-text">کالاابر</span>}
         </button>
         {!collapsed && (
           <button
