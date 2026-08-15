@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { usePermits, useItems } from '../../lib/hooks'
 import { faDigits } from '../../lib/format'
+import { Wordmark } from '../brand/Wordmark'
 import logoUrl from '../../assets/logo-mark.svg'
 
 interface NavItem {
@@ -106,7 +107,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <span className="sidebar-logo-mark" aria-hidden>
             <img src={logoUrl} alt="" width="18" height="18" />
           </span>
-          {!collapsed && <span className="sidebar-logo-text">کالاابر</span>}
+          {!collapsed && (
+            <Wordmark className="sidebar-logo-text" />
+          )}
         </button>
         {!collapsed && (
           <button

@@ -31,6 +31,11 @@ app:
   cors:
     allowed-origins: http://localhost:5173,http://127.0.0.1:5173
 
+  jwt:
+    # فقط برای توسعه؛ در production روی یک متغیر محیطی معادل بنویسید (≥ 32 بایت برای HS256)
+    secret: change-me-in-production-at-least-32-bytes-secret
+    expiration-ms: 3600000
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

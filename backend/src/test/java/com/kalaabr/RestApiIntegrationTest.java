@@ -1,23 +1,10 @@
 package com.kalaabr;
 
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
@@ -34,111 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * کل چرخه: انبار/دسته/کالا → صدور/تأیید/لغو مجوز → حساب نقدی — همه از طریق HTTP
  * به‌صورت زنده تست می‌شوند. موجودی رزروشده و incoming هرگز در دیتابیس ذخیره
  * نمی‌شوند و فقط در پاسخ کالا به‌صورت دینامیک ظاهر می‌شوند.
+ * <p>
+ * راه‌اندازی کانتینر و هدر احراز هویت در {@link AbstractIntegrationTest} است؛
+ * تکتک درخواست‌ها از طریق {@code mockMvc} احرازشده اجرا می‌شوند.
  */
-@SpringBootTest
-@Testcontainers
-class RestApiIntegrationTest {
-
-    @Container
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
-            .withDatabaseName("kalaabr")
-            .withUsername("kalaabr")
-            .withPassword("kalaabr");
-
-    @DynamicPropertySource
-    static void overrideDatasource(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
-    }
-
-    @Autowired
-    protected WebApplicationContext webApplicationContext;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    @Autowired
-    protected JdbcTemplate jdbcTemplate;
-
-    protected MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @BeforeEach
-    void cleanDatabase() {
-        jdbcTemplate.execute(
-                "TRUNCATE TABLE permit_line, permit, item, category, warehouse RESTART IDENTITY CASCADE");
-        jdbcTemplate.execute("UPDATE cash_account SET balance = 0");
-    }
-
-    // ------------------------------------------------------------ ابزار کمکی
-
-    protected String jsonOf(Map<String, Object> map) throws Exception {
-        return objectMapper.writeValueAsString(map);
-    }
-
-    protected void setCash(BigDecimal balance) {
-        jdbcTemplate.update("UPDATE cash_account SET balance = ?", balance);
-    }
-
-    protected JsonNode postJson(String url, String body) throws Exception {
-        MvcResult result = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(body))
-                .andExpect(status().isCreated())
-                .andReturn();
-        return objectMapper.readTree(result.getResponse().getContentAsString());
-    }
-
-    protected long postId(String url, String body) throws Exception {
-        return postJson(url, body).get("id").asLong();
-    }
-
-    protected long createWarehouse(String name, int capacity) throws Exception {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("name", name);
-        body.put("capacity", capacity);
-        return postId("/api/warehouses", jsonOf(body));
-    }
-
-    protected long createCategory(String name, Long parentId) throws Exception {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("name", name);
-        if (parentId != null) {
-            body.put("parentId", parentId);
-        }
-        return postId("/api/categories", jsonOf(body));
-    }
-
-    protected long createItem(String name, long categoryId, long warehouseId, int onHand) throws Exception {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("name", name);
-        body.put("categoryId", categoryId);
-        body.put("warehouseId", warehouseId);
-        body.put("unitOfMeasure", "عدد");
-        body.put("quantityOnHand", onHand);
-        return postId("/api/items", jsonOf(body));
-    }
-
-    protected JsonNode issuePermit(String url, long warehouseId, long itemId, int quantity, String unitPrice)
-            throws Exception {
-        Map<String, Object> line = new LinkedHashMap<>();
-        line.put("itemId", itemId);
-        line.put("quantity", quantity);
-        line.put("unitPrice", new BigDecimal(unitPrice));
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("warehouseId", warehouseId);
-        body.put("lines", java.util.List.of(line));
-        return postJson(url, jsonOf(body));
-    }
-
-    protected JsonNode getJson(String url) throws Exception {
-        MvcResult result = mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();
-        return objectMapper.readTree(result.getResponse().getContentAsString());
-    }
+class RestApiIntegrationTest extends AbstractIntegrationTest {
 
     // ================================================================== انبارها
 
@@ -721,7 +608,9 @@ class RestApiIntegrationTest {
                     .andExpect(jsonPath("$.paths.['/api/items']").exists())
                     .andExpect(jsonPath("$.paths.['/api/permits/purchases']").exists())
                     .andExpect(jsonPath("$.paths.['/api/permits/sales']").exists())
-                    .andExpect(jsonPath("$.paths.['/api/cash-account']").exists());
+                    .andExpect(jsonPath("$.paths.['/api/cash-account']").exists())
+                    .andExpect(jsonPath("$.paths.['/api/auth/register']").exists())
+                    .andExpect(jsonPath("$.paths.['/api/auth/login']").exists());
         }
 
         @Test

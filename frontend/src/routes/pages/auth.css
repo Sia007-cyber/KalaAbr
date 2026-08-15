@@ -1,0 +1,90 @@
+/* =============================================================
+   Auth pages — /login + /register. Centered Persian RTL card,
+   reuses the design-token form primitives (.field/.input/.btn-*).
+   ============================================================= */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+  background:
+    radial-gradient(
+      1200px 600px at 85% -10%,
+      color-mix(in srgb, var(--primary-50) 60%, transparent),
+      transparent 60%
+    ),
+    var(--bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--text);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  margin-bottom: var(--space-1);
+}
+.auth-logo img {
+  width: 28px;
+  height: 28px;
+}
+
+.auth-head {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.auth-title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+  margin: 0;
+}
+.auth-sub {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.auth-success {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--success-700);
+  background: var(--success-50);
+  border: 1px solid var(--success-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+}
+
+.auth-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+.auth-foot a {
+  color: var(--primary-700);
+  font-weight: var(--weight-medium);
+}
+.auth-foot a:hover {
+  text-decoration: underline;
+}

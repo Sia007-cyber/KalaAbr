@@ -95,6 +95,37 @@ export interface CashAccount {
   balance: string
 }
 
+/* ---------- Authentication ---------- */
+
+export type Role = 'USER' | 'ADMIN'
+
+export interface User {
+  id: number
+  username: string
+  email: string
+  role: Role
+  createdAt: string
+}
+
+/** پاسخ ورود و ثبتنام — توکن JWT + اطلاعات کاربر */
+export interface AuthResponse {
+  token: string
+  user: User
+}
+
+export interface RegisterInput {
+  username: string
+  email: string
+  password: string
+}
+
+/** ورود با نام کاربری (ترجیحی) یا ایمیل */
+export interface LoginInput {
+  username?: string
+  email?: string
+  password: string
+}
+
 /** Standard error body from GlobalExceptionHandler */
 export interface ApiErrorBody {
   timestamp: string

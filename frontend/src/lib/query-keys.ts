@@ -23,6 +23,8 @@ export const qk = {
   permit: (id: number) => ['permits', id] as const,
 
   cash: () => ['cash'] as const,
+
+  session: () => ['session'] as const,
 }
 
 export interface QueryClientLike {

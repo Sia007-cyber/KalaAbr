@@ -10,20 +10,29 @@
 
 import type {
   ApiErrorBody,
+  AuthResponse,
   CashAccount,
   Category,
   CategoryInput,
   IssuePermitInput,
   Item,
   ItemInput,
+  LoginInput,
   Permit,
+  RegisterInput,
   Warehouse,
   WarehouseInput,
 } from '../types/api'
+import { getToken } from './token'
 
 /** Resolve the API base URL once. Origin override must be one of the
  *  backend's CORS-whitelisted origins (see application.yml). */
 const apiBase: string = import.meta.env.VITE_API_URL ?? '/api'
+
+const authHeaders = (): Record<string, string> => {
+  const token = getToken()
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
 
 export class ApiError extends Error {
   readonly status: number
@@ -50,7 +59,7 @@ async function request<T>(
   init?: RequestInit,
 ): Promise<T> {
   const res = await fetch(`${apiBase}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     ...init,
   })
 
@@ -73,6 +82,20 @@ async function request<T>(
 /* ------------------------------------------------------------------ */
 
 export const api = {
+  /* ---------- Auth /api/auth ---------- */
+  auth: {
+    register: (input: RegisterInput) =>
+      request<AuthResponse>('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      }),
+    login: (input: LoginInput) =>
+      request<AuthResponse>('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      }),
+  },
+
   /* ---------- Warehouses /api/warehouses ---------- */
   warehouses: {
     list: () => request<Warehouse[]>('/warehouses'),

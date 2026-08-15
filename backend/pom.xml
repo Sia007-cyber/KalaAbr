@@ -72,6 +72,23 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- امنیت + احراز هویت JWT — نسخه توسط spring-boot-starter-parent / BOM مدیریت می‌شود -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+
+		<!-- اعمال فیلترهای امنیتی در MockMvc + ابزارهای تست امنیت -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- مستندات API به‌صورت خودکار (Swagger UI) -->
 		<dependency>
 			<groupId>org.springdoc</groupId>

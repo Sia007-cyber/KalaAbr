@@ -3,6 +3,8 @@
    ============================================================= */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSyncExternalStore } from 'react'
+import { subscribe, getSnapshot, setToken, clearToken } from './token'
 import { api } from './api'
 import {
   invalidateCategoryDerived,
@@ -15,8 +17,39 @@ import type {
   CategoryInput,
   IssuePermitInput,
   ItemInput,
+  LoginInput,
+  RegisterInput,
   WarehouseInput,
 } from '../types/api'
+
+/* ---------- Auth ---------- */
+/** آیا کاربر وارد شده است؟ (بر اساس وجود توکن — واکنشی به وروجود/خروج) */
+export const useIsAuthenticated = () =>
+  useSyncExternalStore(subscribe, getSnapshot)
+
+export const useLogin = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (input: LoginInput) => api.auth.login(input),
+    onSuccess: (data) => {
+      setToken(data.token)
+      void qc.invalidateQueries({ queryKey: qk.session() })
+    },
+  })
+}
+
+export const useRegister = () =>
+  useMutation({
+    mutationFn: (input: RegisterInput) => api.auth.register(input),
+  })
+
+export const useLogout = () => {
+  const qc = useQueryClient()
+  return () => {
+    clearToken()
+    void qc.invalidateQueries({ queryKey: qk.session() })
+  }
+}
 
 /* ---------- Warehouses ---------- */
 export const useWarehouses = () =>
