@@ -25,6 +25,12 @@ spring:
 server:
   port: 8080
 
+# CORS: فقط مسیرهای /api/** را برای دامنه‌های زیر باز می‌کند.
+# وقتی دامنه production یا origin های جدید اضافه شد، اینجا ویرایش کنید.
+app:
+  cors:
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

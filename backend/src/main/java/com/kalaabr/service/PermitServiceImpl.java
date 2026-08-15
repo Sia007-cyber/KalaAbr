@@ -206,6 +206,14 @@ public class PermitServiceImpl implements PermitService {
         return PermitMapper.toResponse(getPermitOrThrow(permitId));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<PermitResponse> findAll() {
+        return permitRepository.findAll().stream()
+                .map(PermitMapper::toResponse)
+                .toList();
+    }
+
     // ------------------------------------------------------------ کمکی‌ها
 
     private Warehouse getWarehouseOrThrow(Long id) {

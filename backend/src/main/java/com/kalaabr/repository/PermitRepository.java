@@ -10,4 +10,5 @@ import java.util.List;
 public interface PermitRepository extends JpaRepository<Permit, Long> {
     List<Permit> findByStatus(PermitStatus status);
     List<Permit> findByPermitTypeAndStatus(PermitType permitType, PermitStatus status);
+    boolean existsByWarehouseId(Long warehouseId);
 }

@@ -21,4 +21,7 @@ public interface PermitService {
     PermitResponse cancelPermit(Long permitId);
 
     PermitResponse getById(Long permitId);
+
+    /** لیست همه مجوزها (به ترتیب ثبت) */
+    java.util.List<PermitResponse> findAll();
 }

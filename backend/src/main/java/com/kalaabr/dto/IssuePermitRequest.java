@@ -8,7 +8,11 @@ import java.util.List;
 
 /** درخواست صدور مجوز خرید یا فروش (نوع مجوز از طریق endpoint مشخص می‌شود، نه این DTO) */
 public record IssuePermitRequest(
-        @NotNull Long warehouseId,
-        @NotEmpty @Valid List<PermitLineRequest> lines
+        @NotNull(message = "شناسه انبار الزامی است")
+        Long warehouseId,
+
+        @NotEmpty(message = "حداقل یک ردیف کالا لازم است")
+        @Valid
+        List<PermitLineRequest> lines
 ) {
 }

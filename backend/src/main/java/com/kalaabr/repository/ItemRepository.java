@@ -8,6 +8,8 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByWarehouseId(Long warehouseId);
     List<Item> findByCategoryId(Long categoryId);
+    boolean existsByWarehouseId(Long warehouseId);
+    boolean existsByCategoryId(Long categoryId);
 
     /** جمع موجودی واقعی فعلی همه کالاهای یک انبار — برای چک ظرفیت */
     @org.springframework.data.jpa.repository.Query(
