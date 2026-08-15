@@ -10,30 +10,40 @@
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+/* Anchor targets clear the sticky header instead of hiding under it. */
+#features,
+#why,
+#about {
+  scroll-margin-top: 80px;
 }
 
 /* ---------------- Top bar ---------------- */
-/* Persistent header spanning the full viewport width, visually distinct
-   from the page base: a solid warm-gray bar (--header-bg, darker than
-   the --bg body and every raised surface, lighter than dark text) that
-   carries the brand + ورود / ثبتنام. The inner row is locked to the
-   content gutter width so it aligns with the hero below. */
+/* Persistent header spanning the full viewport width: a clean, near-white
+   surface (64–72px tall) with only a hairline bottom border — no heavy
+   shadow. Three zones in a balanced RTL row: brand (inline-start → right),
+   a sparse center menu, and quiet actions (dark-mode toggle, ورود, ثبتنام).
+   Aligned to the same content gutter as the hero below. */
 .landing-topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 20;
   width: 100%;
-  background: var(--header-bg);
-  border-bottom: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 .landing-topbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-6);
+  height: 68px;
   max-width: 1120px;
   width: 100%;
   margin-inline: auto;
-  padding: var(--space-4) var(--content-gutter);
+  padding: 0 var(--content-gutter);
 }
 .landing-brand {
   display: inline-flex;
@@ -42,28 +52,134 @@
   font-weight: var(--weight-bold);
   font-size: var(--text-md);
   color: var(--text);
+  flex: none;
 }
 .landing-brand img {
   width: 28px;
   height: 28px;
 }
 
-/* ورود / ثبتنام — right/left of the topbar, enabled on the public hero */
+/* Central menu — sparse, evenly balanced. Hidden behind the hamburger
+   on mobile. */
 .landing-nav {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1);
 }
 .landing-nav-link {
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
-  color: var(--text);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
 }
 .landing-nav-link:hover {
+  color: var(--text);
+  background: var(--surface-raised);
+}
+
+/* Right/left action cluster: dark-mode toggle + ورود + ثبتنام. */
+.landing-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+}
+.landing-theme-toggle {
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.landing-theme-toggle:hover {
+  color: var(--text);
+  background: var(--surface-raised);
+}
+.landing-login {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.landing-login:hover {
   color: var(--primary-700);
   background: var(--primary-50);
+}
+
+/* Hamburger — desktop hidden, mobile-only trigger. */
+.landing-menu-toggle {
+  display: none;
+  width: var(--control-h);
+  height: var(--control-h);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text);
+  flex: none;
+}
+.landing-menu-toggle:hover {
+  background: var(--surface-raised);
+}
+
+/* Mobile drawer menu — drops below the header, white surface + hairline,
+   with nav items and the ورود / ثبتنام actions. */
+.landing-mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--content-gutter);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.landing-mobile-link {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.landing-mobile-link:hover {
+  background: var(--surface-raised);
+}
+.landing-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0 var(--space-1);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-1);
+}
+.landing-mobile-actions .landing-login {
+  margin-inline-start: var(--space-2);
+}
+
+/* Responsive: collapse the center menu + action cluster into a hamburger;
+   the row keeps brand + trigger, the drawer lists everything. */
+@media (max-width: 860px) {
+  .landing-nav,
+  .landing-actions {
+    display: none;
+  }
+  .landing-menu-toggle {
+    display: inline-flex;
+  }
+  .landing-mobile-menu {
+    display: flex;
+  }
 }
 
 /* ---------------- Hero ---------------- */

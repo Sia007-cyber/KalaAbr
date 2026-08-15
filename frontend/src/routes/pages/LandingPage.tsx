@@ -5,13 +5,16 @@
    so the global prefers-reduced-motion guard zeroes it silently.
    ============================================================= */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import {
   Boxes,
   LayoutDashboard,
   ListOrdered,
+  Menu,
+  Moon,
   Warehouse,
+  X,
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Wordmark } from '../../components/brand/Wordmark'
@@ -107,6 +110,7 @@ const FEATURES: Feature[] = [
 export function LandingPage() {
   const rootRef = useReveal()
   const authed = useIsAuthenticated()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   /* Signed-in users hitting the public landing go straight into the app. */
   if (authed) return <Navigate to="/dashboard" replace />
@@ -120,55 +124,134 @@ export function LandingPage() {
      Heavy overlap is intentional — stacked crates read as a loaded
      shelf. Decorative + aria-hidden. */
   const deco = [
-    /* ---- left zone (inline-start); x = offset from the fold edge ---- */
-    { C: SealedTall,   side: 'start', x: 2,  top: 4,  size: 8.0, rot: -10, delay: 0 },
-    { C: OpenCrate,    side: 'start', x: 40, top: 12, size: 4.6, rot: 6,   delay: 140 },
-    { C: SealedCube,   side: 'start', x: 55, top: 3,  size: 5.4, rot: -4,  delay: 60 },
-    { C: FlatSlip,     side: 'start', x: 14, top: 32, size: 6.4, rot: -7,  delay: 200 },
-    { C: LooseOpen,    side: 'start', x: 58, top: 26, size: 3.6, rot: 9,   delay: 90 },
-    { C: Stacked,      side: 'start', x: 30, top: 44, size: 7.2, rot: -3,  delay: 40 },
-    { C: Parcel,       side: 'start', x: 5,  top: 52, size: 5.0, rot: 5,   delay: 170 },
-    { C: SealedBox,    side: 'start', x: 66, top: 47, size: 4.2, rot: -8,  delay: 130 },
-    { C: RollOsb,      side: 'start', x: 22, top: 63, size: 4.8, rot: 7,   delay: 250 },
-    { C: SealedWide,   side: 'start', x: 60, top: 60, size: 7.0, rot: -5,  delay: 90 },
-    { C: OpenFlap,     side: 'start', x: 42, top: 78, size: 3.4, rot: 10,  delay: 210 },
-    { C: TallRecycle,  side: 'start', x: 8,  top: 82, size: 6.0, rot: -6,  delay: 160 },
-    { C: SealedCube,   side: 'start', x: 55, top: 88, size: 4.6, rot: 4,   delay: 40 },
-    { C: LooseOpen,    side: 'start', x: 30, top: 97, size: 5.6, rot: -9,  delay: 230 },
-    /* ---- right zone (inline-end); x = offset from the fold edge ---- */
-    { C: OpenFlap,     side: 'end', x: 2,  top: 6,  size: 6.6, rot: 9,   delay: 170 },
-    { C: SealedWide,   side: 'end', x: 48, top: 2,  size: 7.2, rot: -6,  delay: 20 },
-    { C: SealedTall,   side: 'end', x: 22, top: 18, size: 5.2, rot: 6,   delay: 120 },
-    { C: FlatSlip,     side: 'end', x: 60, top: 22, size: 4.0, rot: -5,  delay: 70 },
-    { C: OpenCrate,    side: 'end', x: 6,  top: 37, size: 4.8, rot: -8,  delay: 240 },
-    { C: RollOsb,      side: 'end', x: 52, top: 38, size: 5.6, rot: 7,   delay: 110 },
-    { C: SealedCube,   side: 'end', x: 26, top: 52, size: 6.8, rot: -4,  delay: 50 },
-    { C: LooseOpen,    side: 'end', x: 2,  top: 58, size: 3.8, rot: 8,   delay: 190 },
-    { C: Parcel,       side: 'end', x: 62, top: 55, size: 4.6, rot: -7,  delay: 220 },
-    { C: Stacked,      side: 'end', x: 34, top: 70, size: 7.6, rot: 5,   delay: 30 },
-    { C: SealedBox,    side: 'end', x: 56, top: 74, size: 5.0, rot: -9,  delay: 150 },
-    { C: SealedTall,   side: 'end', x: 10, top: 88, size: 4.4, rot: 4,   delay: 260 },
-    { C: OpenCrate,    side: 'end', x: 44, top: 90, size: 3.6, rot: -3,  delay: 100 },
-    { C: FlatSlip,     side: 'end', x: 70, top: 97, size: 6.0, rot: 6,   delay: 80 },
+    /* -------------------------------------------------------------
+       Decorative crates now wrap the hero PERIMETER instead of the
+       center: dense clusters in the four corners, sparse mid-edge
+       boxes, and a fully clear central band around the headline /
+       badge / description / CTAs. x stays small (near its owning
+       viewport edge) so nothing drifts behind the copy; negative x
+       parks a few boxes partially off-screen for an immersive, 3D
+       frame. Sizes mix small/medium/large and tops are staggered
+       asymmetrically — no rigid grid. Staggered --decor-delay keeps
+       the existing box-rise entrance. Decorative + aria-hidden.
+       ------------------------------------------------------------- */
+    /* ---- right zone (inline-start); x = depth from the right edge ---- */
+    { C: SealedWide,   side: 'start', x: -3, top: 2,  size: 7.2, rot: -8,  delay: 20 },
+    { C: OpenCrate,    side: 'start', x: 7,  top: 9,  size: 4.4, rot: 6,   delay: 120 },
+    { C: SealedCube,   side: 'start', x: 14, top: 4,  size: 3.8, rot: -5,  delay: 60 },
+    { C: Parcel,       side: 'start', x: 5,  top: 20, size: 5.0, rot: -7,  delay: 170 },
+    { C: FlatSlip,     side: 'start', x: 10, top: 27, size: 3.4, rot: 9,   delay: 210 },
+    { C: SealedTall,   side: 'start', x: 2,  top: 38, size: 4.8, rot: 5,   delay: 90 },
+    { C: LooseOpen,    side: 'start', x: 3,  top: 52, size: 3.2, rot: -9,  delay: 220 },
+    { C: SealedBox,    side: 'start', x: -2, top: 64, size: 6.6, rot: 6,   delay: 30 },
+    { C: RollOsb,      side: 'start', x: 9,  top: 74, size: 4.2, rot: -6,  delay: 150 },
+    { C: OpenFlap,     side: 'start', x: 16, top: 84, size: 5.6, rot: 4,   delay: 110 },
+    { C: TallRecycle,  side: 'start', x: 4,  top: 93, size: 4.0, rot: -8,  delay: 200 },
+    /* ---- left zone (inline-end); x = depth from the left edge ---- */
+    { C: Stacked,      side: 'end', x: -3, top: 3,  size: 7.6, rot: 8,   delay: 40 },
+    { C: SealedTall,   side: 'end', x: 8,  top: 11, size: 4.2, rot: -6,  delay: 140 },
+    { C: OpenFlap,     side: 'end', x: 15, top: 5,  size: 4.0, rot: 5,   delay: 80 },
+    { C: SealedCube,   side: 'end', x: 4,  top: 22, size: 5.2, rot: 6,   delay: 190 },
+    { C: LooseOpen,    side: 'end', x: 9,  top: 29, size: 3.6, rot: -8,  delay: 230 },
+    { C: Parcel,       side: 'end', x: 2,  top: 41, size: 4.6, rot: -5,  delay: 100 },
+    { C: FlatSlip,     side: 'end', x: 5,  top: 55, size: 3.4, rot: 7,   delay: 210 },
+    { C: SealedWide,   side: 'end', x: -2, top: 66, size: 7.0, rot: -7,  delay: 50 },
+    { C: OpenCrate,    side: 'end', x: 10, top: 76, size: 4.4, rot: 5,   delay: 160 },
+    { C: RollOsb,      side: 'end', x: 17, top: 86, size: 5.8, rot: -4,  delay: 120 },
+    { C: SealedBox,    side: 'end', x: 3,  top: 94, size: 3.8, rot: 8,   delay: 220 },
   ]
 
   return (
     <div className="landing" ref={rootRef as React.RefObject<HTMLDivElement>}>
       <header className="landing-topbar">
         <div className="landing-topbar-inner">
-          <a className="landing-brand" href="/">
+          <a className="landing-brand" href="/" aria-label="کالاابر">
             <img src={logoMarkUrl} alt="" width="28" height="28" />
             <Wordmark />
           </a>
-          <nav className="landing-nav" aria-label="احراز هویت">
-            <Link className="landing-nav-link" to="/login">
+
+          <nav className="landing-nav" aria-label="ناوبری اصلی">
+            <Link className="landing-nav-link" to="/">
+              خانه
+            </Link>
+            <a className="landing-nav-link" href="#features">
+              امکانات
+            </a>
+            <a className="landing-nav-link" href="#why">
+              چرا کالاابر؟
+            </a>
+            <a className="landing-nav-link" href="#about">
+              درباره ما
+            </a>
+          </nav>
+
+          <div className="landing-actions">
+            <button
+              type="button"
+              className="landing-theme-toggle"
+              aria-label="حالت تاریک"
+              title="حالت تاریک"
+            >
+              <Moon size={18} strokeWidth={1.6} aria-hidden />
+            </button>
+            <Link className="landing-login" to="/login">
               ورود
             </Link>
             <Button asChild size="sm" variant="primary">
               <Link to="/register">ثبتنام</Link>
             </Button>
-          </nav>
+          </div>
+
+          <button
+            type="button"
+            className="landing-menu-toggle"
+            aria-label={menuOpen ? 'بستن منو' : 'باز کردن منو'}
+            aria-expanded={menuOpen}
+            aria-controls="landing-mobile-menu"
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            {menuOpen ? <X size={20} aria-hidden /> : <Menu size={20} aria-hidden />}
+          </button>
         </div>
+
+        {menuOpen && (
+          <div className="landing-mobile-menu" id="landing-mobile-menu">
+            <Link className="landing-mobile-link" to="/" onClick={() => setMenuOpen(false)}>
+              خانه
+            </Link>
+            <a
+              className="landing-mobile-link"
+              href="#features"
+              onClick={() => setMenuOpen(false)}
+            >
+              امکانات
+            </a>
+            <a
+              className="landing-mobile-link"
+              href="#why"
+              onClick={() => setMenuOpen(false)}
+            >
+              چرا کالاابر؟
+            </a>
+            <a
+              className="landing-mobile-link"
+              href="#about"
+              onClick={() => setMenuOpen(false)}
+            >
+              درباره ما
+            </a>
+            <div className="landing-mobile-actions">
+              <Link className="landing-login" to="/login" onClick={() => setMenuOpen(false)}>
+                ورود
+              </Link>
+              <Button asChild size="sm" variant="primary">
+                <Link to="/register" onClick={() => setMenuOpen(false)}>
+                  ثبتنام
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       <section className="landing-hero">
@@ -220,8 +303,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-features">
-        <h2>چرا کالاابر؟</h2>
+      <section className="landing-features" id="features">
+        <h2 id="why">چرا کالاابر؟</h2>
         <div className="feature-grid">
           {FEATURES.map(({ title, desc, Icon }, i) => (
             <article
@@ -239,7 +322,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="landing-footer">
+      <footer className="landing-footer" id="about">
         <div className="landing-footer-inner">
           <span>© ۱۴۰۵ کالاابر — مدیریت انبارداری</span>
         </div>
